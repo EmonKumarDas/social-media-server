@@ -19,6 +19,7 @@ async function run() {
     try {
         const usersCollection = client.db('social').collection('users');
         const postCollection = client.db('social').collection('post');
+        const commentCollection = client.db('social').collection('comments');
 
         app.post('/users', async (req, res) => {
             const users = req.body;
@@ -31,6 +32,33 @@ async function run() {
             res.send(result);
         })
 
+        app.post('/comments', async (req, res) => {
+            const comment = req.body;
+            const result = commentCollection.insertOne(comment);
+            res.send(result);
+        })
+
+        app.get('/comments/:id', async (req, res) => {
+            const comment = commentCollection.find({});
+            const comments = await comment.toArray();
+            const findComment = comments.filter(newcomment => newcomment.postId === req.params.id);
+            res.send(findComment);
+
+          })
+        // app.get('/comments', async (req, res) => {
+        //     const id = req.query.id;
+        //     const comments = await commentCollection.find({ postId: id }).toArray();
+        //     const posts = await postCollection.find({ id: id }).toArray();
+        //     res.send({ comments: comments, posts: posts });
+        // });
+        // app.get('/comments',async(req,res)=>{
+        //     const comments = await commentCollection.find({}).toArray();
+        //     const post = await postCollection.find({}).toArray();
+        //     const getComments = comments.filter(comment=>comment.
+        //         postId=== ) 
+        //     res.send(comments);
+
+        // })
 
         // Edit userInfo
 
@@ -81,7 +109,7 @@ async function run() {
         })
 
         app.get('/post', async (req, res) => {
-            const post = await postCollection.find({}).sort({like:-1}).toArray();
+            const post = await postCollection.find({}).sort({ like: -1 }).toArray();
             res.send(post)
         })
 
