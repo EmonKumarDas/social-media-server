@@ -44,7 +44,7 @@ async function run() {
             const findComment = comments.filter(newcomment => newcomment.postId === req.params.id);
             res.send(findComment);
 
-          })
+        })
         // app.get('/comments', async (req, res) => {
         //     const id = req.query.id;
         //     const comments = await commentCollection.find({ postId: id }).toArray();
@@ -107,7 +107,13 @@ async function run() {
             const posts = await cursor.toArray();
             res.send(posts)
         })
-
+        // delete comment 
+        app.delete('/Deletepost/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await postCollection.deleteOne(query);
+            res.send(result)
+        })
         app.get('/post', async (req, res) => {
             const post = await postCollection.find({}).sort({ like: -1 }).toArray();
             res.send(post)
