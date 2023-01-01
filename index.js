@@ -115,6 +115,10 @@ async function run() {
             res.send(result)
         })
         app.get('/post', async (req, res) => {
+            const post = await postCollection.find({}).sort({ like: -1 }).limit(3).toArray();
+            res.send(post)
+        })
+        app.get('/Mediapost', async (req, res) => {
             const post = await postCollection.find({}).sort({ like: -1 }).toArray();
             res.send(post)
         })
